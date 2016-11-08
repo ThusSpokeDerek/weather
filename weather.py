@@ -1,16 +1,21 @@
+import env
 import urllib
 import requests
+import json
 from bs4 import BeautifulSoup
 from twilio.rest import TwilioRestClient
 
 def weatherFromYahoo():
+	json = requests.get("http://query.yahooapis.com/v1/public/yql?q=select+*+from+geo.places+where+text%3D%"+ zipcode +"%22&format=json")
+	data = json.loads(json.read())
+	woeid =
 	yahoo = requests.get("https://www.yahoo.com/news/weather/united-states/new-york/new-york-12761507")
 	yahoo_content = BeautifulSoup(yahoo.content, "html.parser")
 	city = yahoo_content.findAll("h1", { "class" : "city" })
 	if city[0].text == 'New York':
 		temp = yahoo_content.findAll("span", { "class" : "Va(t)" })
 		weatherFromYahoo.temp = temp[0].text
-		desc = yahoo_content.findAll("span", { "class" : "description"}) 
+		desc = yahoo_content.findAll("span", { "class" : "description"})
 		weatherFromYahoo.desc = desc[0].text
 		prec_approx = yahoo_content.findAll("span", { "class" : "M(5px) D(ib)"})
 		weatherFromYahoo.prec_approx = prec_approx[0].text
@@ -27,7 +32,7 @@ def weatherFromNOAA():
 	if city[0].text == "New York, La Guardia Airport (KLGA)":
 		temp = noaa_content.findAll("p", { "class" : "myforecast-current-lrg" })
 		weatherFromNOAA.temp = temp[0].text[:-2]
-		desc = noaa_content.findAll("p", { "class" : "myforecast-current"}) 
+		desc = noaa_content.findAll("p", { "class" : "myforecast-current"})
 		weatherFromNOAA.desc = desc[0].text
 		more_desc = noaa_content.findAll("div", { "class" : "col-sm-10 forecast-text"})
 		weatherFromNOAA.more_desc = more_desc[0].text
@@ -38,46 +43,20 @@ def weatherFromNOAA():
 weatherFromNOAA()
 weatherFromYahoo()
 
-if weatherFromYahoo.temp != weatherFromNOAA.temp: 
-	avg_temp = (int(weatherFromYahoo.temp)+int(weatherFromNOAA.temp))/2
+try:
+	if weatherFromYahoo.temp != weatherFromNOAA.temp:
+		avg_temp = (int(weatherFromYahoo.temp)+int(weatherFromNOAA.temp))/2
 
-if weatherFromYahoo.desc.replace(" ","").strip().lower() != weatherFromNOAA.desc.replace(" ","").strip().lower(): 
-	print 'ok'
-else: 
-	print weatherFromYahoo.desc
+	if weatherFromYahoo.desc.replace(" ","").strip().lower() != weatherFromNOAA.desc.replace(" ","").strip().lower():
+		raise ValueError('just continue its ok')
+except ValueError:
+	weatherFromYahoo.desc =  weatherFromYahoo.desc
 
-
-account_sid = "ACaaec088d2154984f4ed2e3186039a7d9" # Your Account SID from www.twilio.com/console
-auth_token  = "e221d8f9fb10149b63f5ac27f785c14f"  # Your Auth Token from www.twilio.com/console
-
+account_sid = env.sid # Your Account SID from www.twilio.com/console
+auth_token  = env.token  # Your Auth Token from www.twilio.com/console
 client = TwilioRestClient(account_sid, auth_token)
 
 message = client.messages.create(
-	body=weatherFromNOAA.temp,
-    to="+13473666460",    # Replace with your phone number
-    from_="+16467986679") # Replace with your Twilio number
-
-print(message.sid)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	body='The temperature currently is ' + weatherFromNOAA.temp + ' and ' + weatherFromYahoo.desc + '. ' + 'The tempature feels like its ' + weatherFromYahoo.temp_feel_like + '. ' + 'More info: ' + weatherFromNOAA.more_desc,
+    to=env.cell,    # Replace with your phone number
+    from_=env.twilio_num) # Replace with your Twilio number
