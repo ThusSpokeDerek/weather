@@ -10,8 +10,8 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.4/jquery.fullPage.min.js"></script>
-      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap-flex.css">
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.8.4/jquery.fullPage.min.css">
       <link rel="stylesheet" href="css/main.css" />
   </head>
@@ -22,19 +22,19 @@
             <form action="." method="POST">
                 <h3>For daily weather updates, please submits a the form</h3>
                 <div class="form-group input-group">
-                    <span class="input-group-addon"><i class="fa fa-address-card" aria-hidden="true"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-address-card fa-fw" aria-hidden="true"></i></span>
                     <input class="form-control" type="text" name="name" placeholder="Ex. John Doe"/>
                 </div>
                 <div class="form-group input-group">
-                    <span class="input-group-addon"><i class="fa fa-mobile fa-lg" aria-hidden="true"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-mobile fa-fw fa-lg" style="width:1em" aria-hidden="true"></i></span>
                     <input class="form-control" text="text" name="cell" placeholder="Ex. 555-555-5555"/>
                 </div>
                 <div class="form-group input-group">
-                    <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i></span>
                     <input class="form-control" text="text" name="zip" placeholder="Ex. zipcode"/>
                 </div>
                 <div class="form-group input-group">
-                    <span class="input-group-addon"><i class="fa fa-globe" aria-hidden="true"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-globe fa-fw" aria-hidden="true"></i></span>
                     <input class="form-control" text="text" name="time" placeholder="Ex. hh:mm"/>
                 </div>
                 <button type="submission" class="btn btn-warning">All Ready</button>
@@ -42,7 +42,8 @@
         </div>
     {% else %}
         <div class="col-xs-3" style="position: fixed; top: 30%;left: 50%;margin-top: -100px;margin-left: -200px;">
-            <h3>Thank you for submitting!</h3>
+              <h3>Thank you for submitting. You'll receive a message shortly!</h3>
+              {submit = false}
         </div>
     {% endif %}
   </body>

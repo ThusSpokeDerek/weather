@@ -1,10 +1,12 @@
+import env
 import threading
 import subprocess
 import os
 import sys
 from flask import Flask, render_template, request, abort
 from firebase import firebase
-firebase = firebase.FirebaseApplication('https://weather-7fe61.firebaseio.com/', None)
+
+firebase = firebase.FirebaseApplication(env.db, None)
 
 app = Flask(__name__)
 app.debug = True
@@ -16,16 +18,18 @@ submit = False
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html', submit = False)
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST', 'GET'])
 def appForm():
     name = str(request.form['name'])
     cell = str(request.form['cell'])
     zipcode = str(request.form['zip'])
     time = str(request.form['time'])
     result = firebase.post('/client', {'name' : name, 'cell' : cell, 'zipcode' : zipcode, 'time' : time})
-    return 
+    if cell and zipcode:
+    	return render_template('index.html', submit = True)
+    return render_template('index.html', submit = False)
 # @app.route('/generate')
 # def generate():
 #     # threading.Thread(target=lambda: run_script()).start()
