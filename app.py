@@ -29,7 +29,7 @@ def appForm():
     result = firebase.post('/client', {'name' : name, 'cell' : cell, 'zipcode' : zipcode, 'time' : time})
     if cell and zipcode:
     	return render_template('index.html', submit = True)
-    return render_template('index.html', submit = False)
+        
 # @app.route('/generate')
 # def generate():
 #     # threading.Thread(target=lambda: run_script()).start()
